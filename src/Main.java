@@ -16,14 +16,15 @@ public class Main {
         fillArray();
         changeArray();
         fillDiagonal();
+        System.out.println(java.util.Arrays.toString(createArray(3, 6)));
     }
-
+//1
     public static void printThreeWords() {
         System.out.println("Orange");
         System.out.println("Banana");
         System.out.println("Apple");
     }
-
+//2
     public static void checkSumSign() {
         int a = 1;
         int b = 2;
@@ -34,7 +35,7 @@ public class Main {
             System.out.println("Сумма отрицательная");
         }
     }
-
+//3
     public static void printColor() {
         int value = 100500;
         if (value <= 0) {
@@ -45,7 +46,7 @@ public class Main {
             System.out.println("Зеленый");
         }
     }
-
+//4
     public static void compareNumbers() {
         int a = 5;
         int b = 3;
@@ -55,12 +56,12 @@ public class Main {
             System.out.println("a < b");
         }
     }
-
+//5
     public static boolean checkSum(int a, int b) {
         int sum = a + b;
         return sum >= 10 && sum <= 20;
     }
-
+//6
     public static void checkNumber(int number) {
         if (number >= 0) {
             System.out.println("Положительное");
@@ -68,21 +69,21 @@ public class Main {
             System.out.println("Отрицательное");
         }
     }
-
+//7
     public static boolean isNegative(int number) {
         return number < 0;
     }
-
+//8
     public static void printStringWordNumber(String str, int times) {
         for (int i = 0; i < times; i++) {
             System.out.println(str);
         }
     }
-
+//9
     public static boolean isYear(int year) {
         return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
     }
-
+//10
     public static void invertArray() {
         int[] arr = {1, 1, 0, 0, 1, 0, 1, 1, 0, 0};
         for (int i = 0; i < arr.length; i++) {
@@ -94,7 +95,7 @@ public class Main {
         }
         System.out.println(java.util.Arrays.toString(arr));
     }
-
+//11
     public static void fillArray() {
         int[] arr = new int[100];
         for (int i = 0; i < arr.length; i++) {
@@ -102,7 +103,7 @@ public class Main {
         }
         System.out.println(java.util.Arrays.toString(arr));
     }
-
+//12
     public static void changeArray() {
         int[] arr = {1, 5, 3, 2, 11, 4, 5, 2, 4, 8, 9, 1};
         for (int i = 0; i < arr.length; i++) {
@@ -112,19 +113,23 @@ public class Main {
         }
         System.out.println(java.util.Arrays.toString(arr));
     }
-
+//13
     public static void fillDiagonal() {
-        // Создаем матрицу 3 на 3
+
         int[][] matrix = new int[3][3];
 
-        // Цикл теперь работает до 3
         for (int i = 0; i < 3; i++) {
             matrix[i][i] = 1;
         }
 
-        // Цикл вывода теперь тоже работает до 3
         for (int i = 0; i < 3; i++) {
             System.out.println(java.util.Arrays.toString(matrix[i]));
         }
+    }
+//14
+    public static int[] createArray(int len, int initialValue) {
+        int[] arr = new int[len];
+        java.util.Arrays.fill(arr, initialValue);
+        return arr;
     }
 }
