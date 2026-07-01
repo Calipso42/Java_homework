@@ -6,6 +6,9 @@ public class Main {
 
         // Задание 2
         checkSumSign();
+
+        // Задание 3
+        printColor();
     }
 
     // Задание 1
@@ -26,6 +29,19 @@ public class Main {
             System.out.println("Сумма положительная");
         } else {
             System.out.println("Сумма отрицательная");
+        }
+    }
+
+    // Задание 3
+    public static void printColor() {
+        int value = 100500;
+
+        if (value <= 0) {
+            System.out.println("Красный");
+        } else if (value > 0 && value <= 100) {
+            System.out.println("Желтый");
+        } else {
+            System.out.println("Зеленый");
         }
     }
 }
