@@ -9,6 +9,9 @@ public class Main {
 
         // Задание 3
         printColor();
+
+        // Задание 4
+        compareNumbers();
     }
 
     // Задание 1
@@ -42,6 +45,18 @@ public class Main {
             System.out.println("Желтый");
         } else {
             System.out.println("Зеленый");
+        }
+    }
+
+    // Задание 4
+    public static void compareNumbers() {
+        int a = 5; // Можете поставить любое число
+        int b = 3; // Можете поставить любое число
+
+        if (a >= b) {
+            System.out.println("a >= b");
+        } else {
+            System.out.println("a < b");
         }
     }
 }
