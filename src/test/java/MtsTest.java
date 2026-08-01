@@ -1,71 +1,78 @@
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-
 import java.time.Duration;
-import java.util.List;
 
 public class MtsTest {
     public static void main(String[] args) throws InterruptedException {
 
         WebDriver driver = new ChromeDriver();
         driver.manage().window().maximize();
-
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
 
         driver.get("https://mts.by");
 
+        mainPage page = new mainPage(driver);
+        PaymentFramePage paymentFrame = new PaymentFramePage(driver);
+
         try {
-        WebElement acceptCookies = driver.findElement(By.xpath("//button[contains(text(), 'Принять')]"));
-            acceptCookies.click();
-        } catch (Exception _) {}
+            driver.findElement(By.xpath("//button[contains(text(), 'Принять')]")).click();
+        } catch (Exception ignored) {}
 
         //Задание 1
-        WebElement mainTitle = driver.findElement(By.xpath("//*[@id='pay-section']//h2"));
-        String titleText = mainTitle.getText().trim().replace("\n", " ");
-        if (!titleText.equals("ОНЛАЙН ПОПОЛНЕНИЕ БЕЗ КОМИССИИ")) {
-            throw new AssertionError("Название не совпадает, в блоке сейчас: " + titleText);
+
+        page.selectPaymentOption("Услуги связи");
+        if (!page.getPhonePlaceholderText().contains("Номер") || !page.getSumPlaceholderText().contains("Сумма")) {
+            throw new AssertionError("Ошибка: Услуги связи");
+        }
+
+        page.selectPaymentOption("Домашний интернет");
+        if (!page.getPhonePlaceholderText().contains("Номер") || !page.getSumPlaceholderText().contains("Сумма")) {
+            throw new AssertionError("Ошибка: Домашний интернет");
+        }
+
+        page.selectPaymentOption("Рассрочка");
+        if (!page.getPhonePlaceholderText().contains("Номер") || !page.getSumPlaceholderText().contains("Сумма")) {
+            throw new AssertionError("Ошибка: Рассрочка");
+        }
+
+        page.selectPaymentOption("Задолженность");
+        if (!page.getPhonePlaceholderText().contains("Номер") || !page.getSumPlaceholderText().contains("Сумма")) {
+            throw new AssertionError("Ошибка: Задолженность");
         }
 
         //Задание 2
-        WebElement logos = driver.findElement(By.xpath("//div[@class='pay__partners']"));
-        List<WebElement> logosList = logos.findElements(By.xpath(".//img"));
-        if (logosList.isEmpty()) {
-            throw new AssertionError("Логотипы платёжных систем не найдены");
+
+        page.selectPaymentOption("Услуги связи");
+        page.fillPaymentForm("297777777", "25");
+        page.clickContinue();
+
+        paymentFrame.switchToFrame();
+
+        String descriptionAmount = paymentFrame.getInfoAmountText();
+        String buttonAmount = paymentFrame.getBtnAmountText();
+        if (!descriptionAmount.contains("25") || !buttonAmount.contains("25")) {
+            throw new AssertionError("Неверная сумма");
         }
 
-        //Задание 3
-        WebElement link = driver.findElement(By.xpath("//*[@id='pay-section']//a"));
-        org.openqa.selenium.JavascriptExecutor js = (org.openqa.selenium.JavascriptExecutor) driver;
-        js.executeScript("arguments[0].removeAttribute('target'); arguments[0].click();", link);
-        String currentUrl = driver.getCurrentUrl();
-        if (!currentUrl.contains("poryadok-oplaty-i-bezopasnost-internet-platezhey")) {
-            throw new AssertionError("Ссылка Подробнее о сервисе не сработала, переход на: " + currentUrl);
+        String phoneTextInFrame = paymentFrame.getInfoPhoneText();
+        if (!phoneTextInFrame.contains("297777777")) {
+            throw new AssertionError("Неверный номер телефона");
         }
 
-        driver.get("https://www.mts.by/");
+        if (!paymentFrame.getCardNumberPlaceholder().equals("Номер карты") ||
+                !paymentFrame.getExpDatePlaceholder().equals("ММ / ГГ") ||
+                !paymentFrame.getCvcPlaceholder().equals("CVC") ||
+                !paymentFrame.getHolderNamePlaceholder().equals("Имя держателя карты")) {
+            throw new AssertionError("Неверный плейсхолдер карты");
+        }
 
+        if (paymentFrame.getLogosList().isEmpty()) {
+            throw new AssertionError("Иконки платёжных систем отсутствуют");
+        }
 
-        //Задание 4
-
-        WebElement phoneInput = driver.findElement(By.xpath("//input[@id='connection-phone']"));
-        phoneInput.clear();
-        phoneInput.sendKeys("297777777");
-
-        WebElement sumInput = driver.findElement(By.xpath("//input[@id='connection-sum']"));
-        sumInput.clear();
-        sumInput.sendKeys("25");
-
-        WebElement continueButton = driver.findElement(By.xpath("//form[@id='pay-connection']//button[contains(text(), 'Продолжить')]"));
-        continueButton.click();
-
-        String finalUrl = driver.getCurrentUrl();
-
-        Thread.sleep(5000);
-
+        Thread.sleep(3000);
+        paymentFrame.switchToDefaultContent();
         driver.quit();
     }
-
-    }
-
+}
