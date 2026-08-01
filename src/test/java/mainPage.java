@@ -1,3 +1,4 @@
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
@@ -13,6 +14,8 @@ public class mainPage {
     public mainPage(WebDriver driver) {
         this.driver = driver;
     }
+
+    @Step("Выбор варианта оплаты: {optionName}")
 
     public void selectPaymentOption(String optionName) {
         By dropdownButton = By.xpath("//*[@id='pay-section']//button[contains(@class, 'select__header')] " +
@@ -34,13 +37,19 @@ public class mainPage {
         driver.findElement(optionXpath).click();
     }
 
+    @Step("Получение плейсхолдера поля Номер")
+
     public String getPhonePlaceholderText() {
         return driver.findElement(phoneInput).getAttribute("placeholder");
     }
 
+    @Step("Получение плейсхолдера поля Сумма")
+
     public String getSumPlaceholderText() {
         return driver.findElement(sumInput).getAttribute("placeholder");
     }
+
+    @Step("Заполнение формы: телефон '{phone}', сумма '{sum}'")
 
     public void fillPaymentForm(String phone, String sum) {
         driver.findElement(phoneInput).clear();
@@ -48,6 +57,8 @@ public class mainPage {
         driver.findElement(sumInput).clear();
         driver.findElement(sumInput).sendKeys(sum);
     }
+
+    @Step("Нажатие кнопки 'Продолжить'")
 
     public void clickContinue() {
         driver.findElement(continueButton).click();
